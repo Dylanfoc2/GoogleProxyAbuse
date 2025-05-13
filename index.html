@@ -1,39 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>ent laralde</title>
-  <style>
-    body { margin: 0; }
-    iframe { width: 100%; height: 100vh; border: none; }
-  </style>
-</head>
-<body>
-  <iframe id="siteFrame"></iframe>
+  <meta charset="UTF-8">
+  <title>Bertrand Laralde de Montréjeau</title>
   <script>
-    // Get URL parameter
-    const params = new URLSearchParams(window.location.search);
-    let targetUrl = params.get('url') || 'https://www.example.com';
-    
-    // Ensure URL has protocol
-    if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
-      targetUrl = 'https://' + targetUrl;
+    function getParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
     }
-    
-    // Set iframe source
-    const iframe = document.getElementById('siteFrame');
-    iframe.src = targetUrl;
-    
-    // Set parent page title
-    document.title = 'ent laralde';
-    
-    // Attempt to set iframe title (usually blocked by cross-origin)
-    iframe.onload = () => {
-      try {
-        iframe.contentDocument.title = 'Bertrand Laralde de Montréjeau';
-      } catch (e) {
-        console.warn('Cannot set iframe title due to cross-origin restrictions');
+
+    window.onload = function() {
+      const targetUrl = getParam("url");
+      if (targetUrl) {
+        const proxyUrl = `https://translate.google.com/translate?hl=en&sl=auto&tl=en&u=${encodeURIComponent(targetUrl)}`;
+        const iframe = document.createElement("iframe");
+        iframe.src = proxyUrl;
+        iframe.style = "width:100vw; height:100vh; border:none;";
+        document.body.appendChild(iframe);
+      } else {
+        document.body.innerHTML = "<p style='font-family:sans-serif;'>No URL parameter provided.</p>";
       }
     };
   </script>
+</head>
+<body style="margin:0; padding:0; overflow:hidden;">
 </body>
 </html>
